@@ -1,0 +1,22 @@
+; 		This function is from File: %recursive-read.r
+;    	Author: "Andrew Martin"
+Recursive-Read: func [
+	"Recursively read Directory."
+	Directory [file! url!]	"The Directory to read."
+	/local Files Subdirectory
+	]  [
+	if exists? Directory [
+		Files: read Directory
+		if block? Files [
+			foreach File Files [
+				if #"/" = last File [
+					Subdirectory: File
+					foreach File read Directory/:Subdirectory [
+						append Files Subdirectory/:File
+						]
+					]
+				]
+			]
+		Files
+		]
+	]

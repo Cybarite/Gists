@@ -1,0 +1,23 @@
+;  		This function is fromFile: %duplicate-directory.r
+;    	Author: "Andrew Martin"
+
+Duplicate-Directory: func [
+	"Duplicates in Write_Directory the structure and files of Read_Directory."
+	Write_Directory [file!]	"The written over directory."
+	Read_Directory [file!] 	"The read from directory."
+][
+	any [
+		exists? Write_Directory
+		make-dir/deep Write_Directory
+		]
+	foreach File recursive-read Read_Directory [
+		either #"/" = last File [
+			any [
+				exists? Write_Directory/:File
+				make-dir Write_Directory/:File
+				]
+			] [
+			write/binary Write_Directory/:File read/binary Read_Directory/:File
+			]
+		]
+	]
